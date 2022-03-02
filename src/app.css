@@ -1,0 +1,160 @@
+.app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  background-color: #020230;
+  color: #fff;
+}
+
+.left {
+  width: 75%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0), #020230),
+    url("./assets/bg.jpg") center center no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+}
+.right {
+  width: 25%;
+}
+
+.list {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  gap: 3px;
+}
+
+.itemList {
+  padding: 9px;
+  width: 100%;
+}
+
+.number {
+  display: inline-block;
+  width: 40%;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.amount {
+  font-size: 16px;
+}
+
+.itemList.active {
+  background-color: teal;
+}
+
+.leftTop,
+.leftBottom {
+  flex: 1;
+}
+
+.leftTop {
+  position: relative;
+}
+
+.timer {
+  position: absolute;
+  left: 120px;
+  bottom: 40px;
+  width: 80px;
+  height: 80px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  font-size: 24px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.leftBottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.question {
+  background-color: #000;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 20px;
+  border-radius: 15px;
+  width: 80%;
+  text-align: center;
+  border: 1px #fff solid;
+}
+
+.answers {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.answer {
+  width: 40%;
+  background: linear-gradient(to right, rgba(0, 0, 0, 1), #020230);
+  font-size: 16px;
+  font-weight: 400;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  margin: 10px;
+  border: 1px #fff solid;
+  cursor: pointer;
+}
+
+.answer:hover,
+.answer.active {
+  background: mediumblue;
+}
+
+.answer.correct {
+  animation: CorrectBlink 3s ease forwards;
+}
+
+.answer.wrong {
+  animation: WrongBlink 3s ease forwards;
+}
+
+@keyframes CorrectBlink {
+  0%,
+  22%,
+  42% {
+    background: linear-gradient(to right, rgba(0, 0, 0, 1), #020230);
+  }
+  20%,
+  40%,
+  60% {
+    background: mediumblue;
+  }
+  62%,
+  100% {
+    background: green;
+  }
+}
+
+@keyframes WrongBlink {
+  0%,
+  22%,
+  42% {
+    background: linear-gradient(to right, rgba(0, 0, 0, 1), #020230);
+  }
+  20%,
+  40%,
+  60% {
+    background: mediumblue;
+  }
+  62%,
+  100% {
+    background: crimson;
+  }
+}
