@@ -1,6 +1,7 @@
-import { Questions } from "./components/Questions";
 import "./app.css";
+import { Questions } from "./components/Questions";
 import { useState } from "react";
+import Start from "./components/Start";
 
 function App() {
   const data = [
@@ -90,44 +91,47 @@ function App() {
     { id: 15, amount: "$ 1.000.000" },
   ].reverse();
 
-  const [questionNumber, setQuestionNumber] = useState(0);
+  const [questionNumber, setQuestionNumber] = useState(1);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [earnedMony, setEarnedMony] = useState("$ 0");
   const [stopGame, setStopGame] = useState(false);
+  const [username, setUsername] = useState(null);
 
   return (
     <div className="app">
-      <div className="left">
-        {!stopGame ? (
-          <Questions
-            data={data}
-            questionNumber={questionNumber}
-            setQuestionNumber={setQuestionNumber}
-            selectedAnswer={selectedAnswer}
-            setSelectedAnswer={setSelectedAnswer}
-            setStopGame={setStopGame}
-            stopGame={stopGame}
-          />
-        ) : (
-          <div className="stopGame">stop</div>
-        )}
-      </div>
+      {username ? (
+        <>
+          <div className="left">
+            <Questions
+              data={data}
+              dataMony={dataMony}
+              questionNumber={questionNumber}
+              setQuestionNumber={setQuestionNumber}
+              selectedAnswer={selectedAnswer}
+              setSelectedAnswer={setSelectedAnswer}
+              setStopGame={setStopGame}
+              stopGame={stopGame}
+            />
+          </div>
 
-      <div className="right">
-        <ul className="list">
-          {dataMony.map((d) => (
-            <li
-              className={
-                questionNumber + 1 === d.id ? "itemList active" : "itemList"
-              }
-              key={d.id}
-            >
-              <span className="number">{d.id}</span>
-              <span className="amount"> {d.amount} </span>
-            </li>
-          ))}
-        </ul>
-      </div>
+          <div className="right">
+            <ul className="list">
+              {dataMony.map((d) => (
+                <li
+                  className={
+                    questionNumber === d.id ? "itemList active" : "itemList"
+                  }
+                  key={d.id}
+                >
+                  <span className="number">{d.id}</span>
+                  <span className="amount"> {d.amount} </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      ) : (
+        <Start setUsername={setUsername} />
+      )}
     </div>
   );
 }

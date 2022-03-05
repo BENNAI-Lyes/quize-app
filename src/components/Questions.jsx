@@ -1,19 +1,41 @@
 import { useEffect, useState } from "react";
+import Timer from "./Timer";
+import useSound from "use-sound";
+import correct from "../sounds/correct.mp3";
+import play from "../sounds/play.wav";
+import wrong from "../sounds/wrong.mp3";
 
 export function Questions({
   data,
+  dataMony,
   questionNumber,
   setQuestionNumber,
   selectedAnswer,
   setSelectedAnswer,
   setStopGame,
+  stopGame,
 }) {
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [styleClass, setStyleClass] = useState("answer");
+  const [moneyEarned, setMoneyEarned] = useState("0 $");
+  const [clicked, setClicked] = useState(false);
+
+  const [letsPlay] = useSound(play);
+  const [correctAnswer] = useSound(correct);
+  const [wrongAnswer] = useSound(wrong);
 
   useEffect(() => {
-    setCurrentQuestion(data[questionNumber]);
+    letsPlay();
+  }, [letsPlay]);
+
+  useEffect(() => {
+    setCurrentQuestion(data[questionNumber - 1]);
   }, [data, questionNumber]);
+
+  useEffect(() => {
+    questionNumber > 1 &&
+      setMoneyEarned(dataMony.find((d) => d.id === questionNumber - 1).amount);
+  }, [questionNumber, dataMony]);
 
   const delay = (deration, callback) => {
     setTimeout(() => {
@@ -22,29 +44,39 @@ export function Questions({
   };
 
   const handelAnswerClick = (answer) => {
+    setClicked(true);
     setSelectedAnswer(answer);
     setStyleClass("answer active");
-    delay(3000, () => {
-      if (answer.correct) {
-        setStyleClass("answer correct");
-      } else {
-        setStyleClass("answer wrong");
-      }
+    delay(2000, () => {
+      answer.correct
+        ? setStyleClass("answer correct")
+        : setStyleClass("answer wrong");
     });
-    delay(6000, () => {
+    delay(4000, () => {
+      answer.correct ? correctAnswer() : wrongAnswer();
+    });
+
+    delay(10000, () => {
       if (answer.correct) {
-        setQuestionNumber((prev) => prev + 1);
+        setClicked(false);
         setSelectedAnswer(null);
+        setQuestionNumber((prev) => prev + 1);
       } else {
         setStopGame(true);
       }
     });
   };
 
-  return (
+  return !stopGame ? (
     <>
       <div className="leftTop">
-        <div className="timer">30</div>
+        <div className="timer">
+          <Timer
+            setStopGame={setStopGame}
+            questionNumber={questionNumber}
+            clicked={clicked}
+          />
+        </div>
       </div>
       <div className="leftBottom">
         <div className="question"> {currentQuestion?.question} </div>
@@ -63,5 +95,7 @@ export function Questions({
         </div>
       </div>
     </>
+  ) : (
+    <div className="stopGame">{`You are earned, ${moneyEarned} `}</div>
   );
 }
